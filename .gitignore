@@ -1,0 +1,9 @@
+venv
+*.log
+*.pyc
+*.env
+.ipynb_checkpoints/
+*.ipynb
+*.csv
+*.net
+*parquet/

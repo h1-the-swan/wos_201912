@@ -1,0 +1,7 @@
+› python get_citations_parquet.py -i mysql_wos_citations.csv mysql_wos2_citations.csv -o wos_citations_201912_parquet --debug >& get_citations_parquet_20191210.log &
+
+python parquet_to_pajek.py wos_citations_201912_parquet wos_citations_201912.net --debug >& parquet_to_pajek_20191210.log &                                        
+
+› nohup ~/code/RelaxMap/ompRelaxmap 999 ~/data/wos_201912/wos_citations_201912.net 18 1 1e-4 0.0 10 ~/data/wos_201912 prior >& relaxmap_wos_20191211.log &
+
+
