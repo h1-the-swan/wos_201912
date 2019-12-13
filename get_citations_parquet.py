@@ -41,6 +41,8 @@ def load_input_files(fnames):
 def main(args):
     logger.debug('reading {} input files'.format(len(args.input)))
     sdf = load_input_files(args.input)
+    logger.debug('removing rows with `cited_UID=="NULL"`')
+    sdf = sdf[sdf['cited_UID']!='NULL']
     logger.debug('dropping duplicates')
     sdf = sdf.drop_duplicates()
     logger.debug('saving to {}'.format(args.output))
