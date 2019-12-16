@@ -6,7 +6,7 @@ python parquet_to_pajek.py wos_citations_201912_parquet wos_citations_201912.net
 
 The above crashed repeatedly (after all calculations were done but before writing to file...?).
 
-New strategy: Identify all papers that 1) have no outgoing citations and 2) were only cited once. Try RelaxMap on this cleaned network. This would decrease the number of edges to 1005719315.
+New strategy: Identify all papers that 1) have no outgoing citations and 2) were only cited once. Remove these papers. Try RelaxMap on this cleaned network.
 
 Actually, first, try just including 'NULL' values from the cited_UID column:
 
@@ -16,4 +16,6 @@ This new citation network has 1254339298 rows (compared to 1269262278 for the la
 
 › python parquet_to_pajek.py wos_citations_20191212_parquet wos_citations_20191212.net --debug >& parquet_to_pajek_20191212.log &
 
+Nope, this crashed too.
 
+Let's try the idea above: remove all papers with no outgoing citations and that were only cited once.

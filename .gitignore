@@ -5,5 +5,8 @@ venv
 .ipynb_checkpoints/
 *.ipynb
 *.csv
+*.tsv
 *.net
 *parquet/
+*.tree
+*.clu

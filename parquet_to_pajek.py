@@ -41,6 +41,7 @@ def write_pajek_to_file(pjk, outfname):
 def main(args):
     logger.debug('loading input file {}'.format(args.input))
     sdf = spark.read.parquet(args.input)
+    logger.debug('input parquet file has {} rows'.format(sdf.count()))
 
     logger.debug('converting to pajek...')
     pjk = create_pajek_from_spark_dataframe(sdf)

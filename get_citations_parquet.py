@@ -38,6 +38,23 @@ def load_input_files(fnames):
             sdf_combined = sdf_combined.union(_sdf)
     return sdf_combined
 
+def remove_some_rows(sdf, citing_colname='UID', cited_colname='cited_UID'):
+    """Remove papers that 1) have no outgoing citations and 2) have only been cited once
+
+    :sdf: spark dataframe
+    :returns: cleaned spark dataframe
+
+    """
+    # get a list of IDs to keep
+    # get this as a spark dataframe with one column (ID)
+    incitations_count = sdf.groupby(cited_colname).count()
+    cited_more_than_once = incitations_count.filter("count > 1").select(cited_colname)
+    has_outgoing = sdf.select(citing_colname).drop_duplicates()
+    to_keep = has_outgoing.withColumnRenamed(citing_colname, cited_colname).union(cited_more_than_once).drop_duplicates()
+    # inner join these IDs to the original dataframe
+    sdf_cleaned = sdf.join(to_keep, on=cited_colname, how='inner')
+    return sdf_cleaned
+
 def main(args):
     logger.debug('reading {} input files'.format(len(args.input)))
     sdf = load_input_files(args.input)
@@ -45,6 +62,9 @@ def main(args):
     sdf = sdf[sdf['cited_UID']!='NULL']
     logger.debug('dropping duplicates')
     sdf = sdf.drop_duplicates()
+    
+    logger.debug("removing papers that have no outgoing citations, and have only been cited once")
+    sdf = remove_some_rows(sdf)
     logger.debug('saving to {}'.format(args.output))
     sdf.write.parquet(args.output)
 
