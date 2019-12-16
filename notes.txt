@@ -19,3 +19,5 @@ This new citation network has 1254339298 rows (compared to 1269262278 for the la
 Nope, this crashed too.
 
 Let's try the idea above: remove all papers with no outgoing citations and that were only cited once.
+
+This worked! (5.3 hours)
