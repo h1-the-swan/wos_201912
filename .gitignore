@@ -10,3 +10,5 @@ venv
 *parquet/
 *.tree
 *.clu
+
+wos_*_2019*.txt
