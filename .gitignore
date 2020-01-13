@@ -1,4 +1,4 @@
-venv
+venv*
 *.log
 *.pyc
 *.env
@@ -12,3 +12,6 @@ venv
 *.clu
 
 wos_*_2019*.txt
+
+# Singularity image files
+*.sif

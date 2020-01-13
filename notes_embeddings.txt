@@ -1,0 +1,12 @@
+2020-01-13
+
+I want to get document embeddings for the WoS papers. Starting with just titles.
+
+Use Glove embeddings, using the `spacy` library.
+
+Use HPC to calculate embeddings in parallel, so use a Singularity container.
+
+The plan:
+WoS papers are currently in a parquet dataset, split into 200 pieces. Each job will take one of those 200 pieces, calculate the average Glove vector for each of the titles, and save it as a pickled pandas Series with index of WoS ID and the vector as the values.
+
+I don't think checkpointing is necessary.
