@@ -21,3 +21,21 @@ Nope, this crashed too.
 Let's try the idea above: remove all papers with no outgoing citations and that were only cited once.
 
 This worked! (5.3 hours)
+
+
+2020-02-06
+`wos_citations_20191213.net` has 73725142 nodes (all unique), and 1164650021 edges
+`wos_papers_20191223_parquet` has 68920461 rows. 55271946 of these have cluster info.
+`wos_citations_cleaned_20200105_parquet` has 1020164414 rows
+
+`wos_citations_20191212_parquet` has all citations for which cited_ID is not NULL: 1254339298 rows
+this corresponds to `wos_citations_201912.net` which has 163830918 nodes
+
+from scientometrics BIR revision:
+The network data used in our analysis come from a recent snapshot of the Web of Science (WoS) citation index consisting of 1,269,262,278 directed citation links between 163,830,918 papers. The data set contains paper-level metadata, such as titles, abstracts, publication dates and venues, and authors. We used WoS because it is one of the most comprehensive bibliographic datasets, covering a large number of articles across most scientific fields. WoS also identifies certain articles as review papers, which was convenient for this project.
+
+We removed some papers from the full data set. In order to reduce the network to a size that we could cluster (see Section~\ref{sec:features}), we removed all papers that had no outgoing citations, and any paper that was only cited once (many of these actually appeared to be placeholder data, for which WoS could not fully identify the cited paper). We also removed papers which were missing all metadata, such as publication year and title. This cleaned data set had 55,271,946 papers, and 1,020,164,414 directed citation links.
+
+...
+
+Identifying clusters in a network of tens of millions of documents is computationally expensive, so we developed a two-step approach to cluster the full network. We started with the Web of Science network, and removed any papers which did not have any outgoing citations, and papers that had not been cited more than once (see Section~\ref{sec:data}). This network had 73,725,142 nodes and 1,164,650,021 edges. In the first clustering step, we identified a non-hierarchical clustering of the full network using a parallelized version of Infomap~\cite{bae_scalable_2013}. This process took 5.3 hours on a machine with 32 cores. 5,513,812 clusters were identified in this way. In the second step, we further processed these clusters to identify hierarchical structure, which is something the parallelized version of Infomap cannot do. We wanted to identify this hierarchy because the structure of science tends to be hierarchical, with smaller communities nested within broader ones. To do this, we used Infomap combined with Apache Spark to further cluster all of the top-level clusters with at least 100 nodes into multi-level, non-overlapping clusters. This second step took about 30 minutes on the same machine. The final clustering had 9,390,263 bottom-level clusters, with a maximum depth of 11, and an average depth of 2.9 (std 0.77).\footnote{Since every node is in exactly one cluster (even if the cluster is only one node), and the leaves of the hierarchy tree represent the nodes themselves, the minimum depth in the hierarchy is 2. In this case, the first level is the cluster the node belongs to, and the second level is the node.}
